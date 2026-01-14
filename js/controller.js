@@ -136,6 +136,17 @@ class Controller {
       this.view.renderChangeLog(this.model);
     });
 
+    // Memory Level
+    this.view.elements.memoryLevel.addEventListener("input", (e) => {
+      updateAndRender(this.model.updateMemoryLevel, e.target.value);
+    });
+
+    // Hell Level
+    this.view.elements.hellLevel.addEventListener("input", (e) => {
+      if (this.view.elements.hellLevel.disabled) return;
+      updateAndRender(this.model.updateHellLevel, e.target.value);
+    });
+
     // Materials input
     this.view.elements.materialsContainer.addEventListener("input", (e) => {
       if (e.target.dataset.type === "material") {

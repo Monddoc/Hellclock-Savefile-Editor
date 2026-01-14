@@ -76,6 +76,26 @@ export class Model {
     }
   }
 
+  // Update Memory Level
+  updateMemoryLevel(value) {
+    if (this.data?.greatBellSkillTreeData) {
+      this.data.greatBellSkillTreeData._memoryLevel = Math.max(
+        0,
+        parseInt(value) || 0
+      );
+    }
+  }
+
+  // Update Hell Level (Ascension)
+  updateHellLevel(value) {
+    if (this.data?.penancesSkillTreeData) {
+      this.data.penancesSkillTreeData._highestHellLevelReached = Math.max(
+        0,
+        parseInt(value) || 0
+      );
+    }
+  }
+
   // Update the amount of a specific crafting material
   updateMaterial(id, value) {
     if (!this.data?.currencySaveData) return;
@@ -141,6 +161,7 @@ export class Model {
     const changes = [];
     if (!this.data || !this.originalData) return changes;
 
+    // Stats
     if (this.data.soulStones !== this.originalData.soulStones) {
       changes.push({
         label: "Soulstones",
@@ -159,6 +180,22 @@ export class Model {
       });
     }
 
+    // Memory Level
+    const oldMem = this.originalData.greatBellSkillTreeData?._memoryLevel || 0;
+    const newMem = this.data.greatBellSkillTreeData?._memoryLevel || 0;
+    if (oldMem !== newMem) {
+      changes.push({ label: "Memory Level", from: oldMem, to: newMem });
+    }
+
+    // Hell Level
+    const oldHell =
+      this.originalData.penancesSkillTreeData?._highestHellLevelReached || 0;
+    const newHell = this.data.penancesSkillTreeData?._highestHellLevelReached || 0;
+    if (oldHell !== newHell) {
+      changes.push({ label: "Hell Level", from: oldHell, to: newHell });
+    }
+
+    // Materials
     const origMats = this.originalData.currencySaveData._persistentData;
     const newMats = this.data.currencySaveData._persistentData;
 
@@ -172,6 +209,7 @@ export class Model {
       }
     });
 
+    // Cursed Shrines
     this.data.dungeonData.forEach((d, i) => {
       const origD = this.originalData.dungeonData.find(
         (od) => od.dungeonID === d.dungeonID
@@ -212,6 +250,17 @@ export class Model {
     return {
       deaths: findVal("cumulativeTotalDeaths", "totalDeaths"),
       runs: findVal("totalRuns", "cumulativeTotalRuns", "_totalRuns"),
+    };
+  }
+
+  // Get Game Mode Flags
+  getGameModes() {
+    if (!this.data) return {};
+    return {
+      hardcore: !!this.data.hardcoreModeEnabled,
+      relaxed: !!this.data.relaxedModeEnabled,
+      vengeance: !!this.data.vengeanceModeEnabled,
+      ascension: !!this.data.ascensionMode,
     };
   }
 

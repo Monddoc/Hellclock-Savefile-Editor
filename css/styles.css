@@ -543,7 +543,6 @@ input[type="number"]:focus {
   font-size: 0.95rem;
 }
 
-
 /* Styles for the change log display box */
 .change-log-box {
   background: rgba(0, 0, 0, 0.3);
@@ -640,14 +639,6 @@ input[type="number"]:focus {
   border-radius: 50%;
 }
 
-/* Reusing the status dot style for consistency across components */
-.status-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-left: 10px; /* Adjust centering */
-  margin-right: 5px;
-}
 .active {
   background: var(--success);
   box-shadow: 0 0 10px var(--success);
@@ -668,4 +659,37 @@ input[type="number"]:focus {
   font-size: 1rem;
   color: #fff;
   display: block;
+}
+
+/* Game Modes Grid */
+.modes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+/* Modes Box */
+.mode-box {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid var(--border);
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.mode-box:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: #555;
+  transform: translateY(-2px);
+}
+
+.mode-label {
+  font-size: 0.9rem;
+  color: #e0e0e0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }

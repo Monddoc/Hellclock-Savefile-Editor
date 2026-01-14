@@ -43,6 +43,46 @@
       </div>
 
       <div id="editor-ui">
+        <div class="panel" style="margin-bottom: 20px">
+          <div class="panel-header">
+            <h2>Game Modes</h2>
+            Cannot be edited
+          </div>
+          <div class="modes-grid">
+            <div class="mode-box" id="mode-hardcore">
+              <div class="status-dot inactive"></div>
+              <div>
+                <div class="info-label">Hardcore</div>
+                <strong class="mode-status-text info-value">Unknown</strong>
+              </div>
+            </div>
+
+            <div class="mode-box" id="mode-ascension">
+              <div class="status-dot inactive"></div>
+              <div>
+                <div class="info-label">Ascension</div>
+                <strong class="mode-status-text info-value">Unknown</strong>
+              </div>
+            </div>
+
+            <div class="mode-box" id="mode-relaxed">
+              <div class="status-dot inactive"></div>
+              <div>
+                <div class="info-label">Relaxed</div>
+                <strong class="mode-status-text info-value">Unknown</strong>
+              </div>
+            </div>
+
+            <div class="mode-box" id="mode-vengeance">
+              <div class="status-dot inactive"></div>
+              <div>
+                <div class="info-label">Vengeance</div>
+                <strong class="mode-status-text info-value">Unknown</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="main-grid">
           <div class="column-left">
             <div class="panel">
@@ -61,6 +101,27 @@
                 <div id="c-points-info" class="cp-breakdown"></div>
               </div>
 
+              <div class="stat-row">
+                <label>Memory Level (Max 120)</label>
+                <input type="number" id="memory-level" min="0" />
+              </div>
+
+              <div class="stat-row">
+                <label>Highest Hell Level</label>
+                <input type="number" id="hell-level" min="0" />
+                <div
+                  id="hell-lock-msg"
+                  style="
+                    font-size: 0.75rem;
+                    color: #666;
+                    margin-top: 5px;
+                    display: none;
+                  "
+                >
+                  🔒 Requires Ascension Mode
+                </div>
+              </div>
+
               <div class="info-grid">
                 <div class="info-box campaign-box">
                   <div id="campaign-dot" class="status-dot"></div>
@@ -71,6 +132,7 @@
                     >
                   </div>
                 </div>
+
                 <div class="info-box">
                   <div class="info-icon">🏃</div>
                   <div>
@@ -78,6 +140,7 @@
                     <strong id="total-runs" class="info-value">0</strong>
                   </div>
                 </div>
+
                 <div class="info-box">
                   <div class="info-icon">💀</div>
                   <div>
@@ -159,7 +222,6 @@
         <button id="btn-close-modal" class="btn-primary">Let's Go!</button>
       </div>
     </div>
-
     <script type="module" src="js/controller.js"></script>
   </body>
 </html>

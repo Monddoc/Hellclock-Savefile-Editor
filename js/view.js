@@ -10,10 +10,13 @@ export class View {
       editorUI: document.getElementById("editor-ui"),
       downloadContainer: document.getElementById("download-container"),
 
-      // Editable Stats
+      // Stats Inputs
       soulstones: document.getElementById("soulstones"),
       cPoints: document.getElementById("c-points"),
       cPointsInfo: document.getElementById("c-points-info"),
+      memoryLevel: document.getElementById("memory-level"),
+      hellLevel: document.getElementById("hell-level"),
+      hellLockMsg: document.getElementById("hell-lock-msg"),
 
       // Read-Only Info Boxes
       totalDeaths: document.getElementById("total-deaths"),
@@ -23,8 +26,15 @@ export class View {
       summaryPanel: document.getElementById("summary-panel"),
       changeLog: document.getElementById("change-log"),
 
+      // Indicators
       campaignDot: document.getElementById("campaign-dot"),
       campaignText: document.getElementById("campaign-text"),
+
+      modeHardcore: document.getElementById("mode-hardcore"),
+      modeRelaxed: document.getElementById("mode-relaxed"),
+      modeVengeance: document.getElementById("mode-vengeance"),
+      modeAscension: document.getElementById("mode-ascension"),
+
       materialsContainer: document.getElementById("materials-container"),
       shrinesContainer: document.getElementById("shrines-container"),
       btnDownload: document.getElementById("btn-download"),
@@ -47,21 +57,36 @@ export class View {
     const data = model.getData();
     if (!data) return;
 
-    // Update editable stats
+    // 1. Stats
     this.elements.soulstones.value = data.soulStones || 0;
+    this.elements.memoryLevel.value =
+      data.greatBellSkillTreeData?._memoryLevel || 0;
+
+    // Hell Level Logic
+    const hellVal = data.penancesSkillTreeData?._highestHellLevelReached || 0;
+    const isAscension = !!data.ascensionMode;
+    this.elements.hellLevel.value = hellVal;
+
+    if (isAscension) {
+      this.elements.hellLevel.disabled = false;
+      this.elements.hellLevel.classList.remove("input-disabled");
+      this.elements.hellLockMsg.style.display = "none";
+    } else {
+      this.elements.hellLevel.disabled = true;
+      this.elements.hellLevel.classList.add("input-disabled");
+      this.elements.hellLockMsg.style.display = "block";
+    }
 
     const rawPoints = data.constellationsData?.constellationPoints || 0;
     this.elements.cPoints.value = rawPoints;
     this.updateConstellationInfo(rawPoints);
 
-    // Update read-only stats
+    // Read-Only Stats
     const stats = model.getCalculatedStats();
-
-    // Format Numbers (e.g., 1,000)
     this.elements.totalDeaths.textContent = stats.deaths.toLocaleString();
     this.elements.totalRuns.textContent = stats.runs.toLocaleString();
 
-    // Update campaign status
+    // 2. Campaign & Game Modes
     const flags = data.flags || [];
     const isCampaignDone = flags.includes("SawEndgameWelcome");
     this.elements.campaignDot.className = isCampaignDone
@@ -74,10 +99,37 @@ export class View {
       ? "var(--success)"
       : "var(--danger)";
 
-    // Render dynamic sections
+    this.renderGameModes(model);
+
+    // 3. Dynamic
     this.renderMaterials(model);
     this.renderShrines(model);
     this.renderChangeLog(model);
+  }
+
+  // Logic to update text and color for Game Modes
+  renderGameModes(model) {
+    const modes = model.getGameModes();
+
+    const setMode = (el, isActive) => {
+      const dot = el.querySelector(".status-dot");
+      const text = el.querySelector(".mode-status-text");
+
+      if (isActive) {
+        dot.className = "status-dot active";
+        text.textContent = "Active";
+        text.style.color = "var(--success)";
+      } else {
+        dot.className = "status-dot inactive";
+        text.textContent = "Inactive";
+        text.style.color = "var(--danger)";
+      }
+    };
+
+    setMode(this.elements.modeHardcore, modes.hardcore);
+    setMode(this.elements.modeRelaxed, modes.relaxed);
+    setMode(this.elements.modeVengeance, modes.vengeance);
+    setMode(this.elements.modeAscension, modes.ascension);
   }
 
   // Update the constellation points breakdown display
